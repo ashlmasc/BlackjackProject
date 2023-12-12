@@ -1,9 +1,5 @@
 package com.skilldistillery.blackjack.app;
 
-import java.util.Scanner;
-
-import com.skilldistillery.blackjack.entities.BlackjackHand;
-import com.skilldistillery.blackjack.entities.Card;
 import com.skilldistillery.blackjack.entities.Dealer;
 import com.skilldistillery.blackjack.entities.Player;
 
@@ -15,10 +11,11 @@ public class BlackjackApplication {
         BlackjackApplication app = new BlackjackApplication();
         app.run();
     }
-
+    
+  
     public void run() {
         // Deal initial cards
-        dealer.resetFaceDown(); // Reset face-down status for the dealer
+        
         dealInitialCards();
 
         // Display initial hands
@@ -30,7 +27,7 @@ public class BlackjackApplication {
         // Check if player busted
         if (!player.isBust()) {
             // Dealer's turn only if the player hasn't busted
-            dealer.play();
+            dealer.play(dealer);
         }
 
         // Determine and display the winner
@@ -38,32 +35,26 @@ public class BlackjackApplication {
     }
 
     private void dealInitialCards() {
-        // Deal the 1st card face-up to the player
-        player.hit(dealer);
+        // Set the player for the dealer
+        dealer.setPlayer(player);
 
-        // Deal the 1st card face-down to the dealer
-        dealer.hitFaceDown();
-
-        // Deal the 2nd card face-up to the player
-        player.hit(dealer);
-
-        // Deal the 2nd card face-up to the dealer
-        dealer.hit();
-
-        // Reset cardNumber for a new round
-        player.resetCardNumber();
-        dealer.resetCardNumber(); // Reset cardNumber for the dealer
+        // Deal two cards to both player and dealer
+        dealer.dealInitialHands();
     }
+
 
     private void displayHands() {
         System.out.println("Player's Hand: " + player.getHand().getCards());
-        dealer.displayHand(); // Display dealer's hand with face-down logic
+        dealer.displayHand(); 
         System.out.println();
     }
 
     private void takeTurn(Player currentPlayer) {
-        while (!currentPlayer.isBust()) {
-            currentPlayer.play(dealer);
+        currentPlayer.play(dealer);
+
+        // If the current player is not the dealer and hasn't busted, initiate the dealer's turn
+        if (!(currentPlayer instanceof Dealer) && !currentPlayer.isBust()) {
+            dealer.play();
             displayHands();
         }
     }
