@@ -1,80 +1,54 @@
 package com.skilldistillery.blackjack.entities;
 
-import java.util.List;
-
 public class Dealer extends Player {
 	private Deck deck;
-	private Player player;
 
 	public Dealer() {
 		super();
 		this.deck = new Deck(); // Initialize the deck
 		this.deck.shuffle(); // Shuffle the deck
-	}
-	
-	public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-
-	public void dealInitialHands() {
-		Card card1 = deck.dealCard();
-		Card card2 = deck.dealCard();
-		player.dealInitialHand(card1, card2);
-
-		card1 = deck.dealCard();
-		card2 = deck.dealCard();
-		dealInitialHand(card1, card2);
+		this.hand = new BlackjackHand();
 	}
 
-	public Card dealCard() {
-		return deck.dealCard();
+	public Card dealCard(Hand hand) {
+		Card card = deck.dealCard();
+		hand.addCard(card);
+
+		// *********************Debug*****************
+		System.out.println("[DEBUG] Dealing " + card + " to " + (hand instanceof BlackjackHand ? "Player" : "Dealer"));
+
+		return card;
 	}
 
-	public void hit() {
-		Card card = dealCard();
-		super.hit(card);
-		String playerType = this instanceof Dealer ? "Dealer" : "Player";
-
-		System.out.println(playerType + "'s Card  " + card);
-
-		if (isBust()) {
-			System.out.println(playerType + " busts!");
-		}
+	public void faceDown() {
+		System.out.println("Dealer's Hand: Face down card, " + hand.getCards().get(0));
 	}
 
-//	@Override
-//	public void displayHand() {
-//		System.out.print("Dealer's Hand: ");
-//		List<Card> cards = getHand().getCards();
-//
-//		for (int i = 0; i < cards.size(); i++) {
-//			System.out.print(cards.get(i));
-//			if (i < cards.size() - 1) {
-//				System.out.print(", ");
-//			}
-//		}
-//
-//		System.out.println();
-//	}
-	
-	public void displayDealerHand() {
-        displayHand(); // Call the displayHand method from the Player class
-    }
+	public void dealersTurn() {
+		// Reveal hidden card
+		// *********************Debug*****************
+		System.out.println("[DEBUG] Dealer reveals hand: " + getHand());
 
-	public void play() {
+		// Dealer hits while hand value is less than 17
 		while (getHand().getHandValue() < 17) {
-			hit(dealCard());
-			displayHand();
+			Card newCard = deck.dealCard();
+			hit(newCard);
+			System.out.println("Dealer hits: " + newCard);
+			displayHand(); // Display updated hand
 		}
 
-		if (!isBust()) {
-			stand();
+		// Check for bust
+		if (isBust()) {
+			System.out.println("Dealer busts!");
+		} else {
+			System.out.println("Dealer stands.");
 		}
 	}
 
-//    public void resetDeck() {
-//        deck = new Deck();
-//        deck.shuffle();
-//    }
+	public void dealInitialHands(Player player, Dealer dealer) {
+		dealCard(player.getHand());
+		dealCard(dealer.getHand());
+		dealCard(player.getHand());
+		dealCard(dealer.getHand());
+	}
 }

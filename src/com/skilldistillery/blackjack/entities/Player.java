@@ -4,84 +4,101 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Player {
-    protected Hand hand;
-    
-    public void dealInitialHand(Card card1, Card card2) {
-        hand.addCard(card1);
-        hand.addCard(card2);
-    }
-  
+	protected Hand hand;
 
-    public Player() {
-        this.hand = new BlackjackHand();
-    }
+	public Player() {
+		this.hand = new BlackjackHand();
+	}
 
-    public Hand getHand() {
-        return hand;
-    }
+	public Hand getHand() {
+		return hand;
+	}
 
-    public void hit(Card card) {
-        hand.addCard(card);
-        if (this instanceof Dealer) {
-            System.out.println("Dealer's Card: " + card);
-        } else {
-            System.out.println("Player's Card: " + card);
-        }
-        if (((BlackjackHand) hand).isBust()) {
-            if (this instanceof Dealer) {
-                System.out.println("Dealer busts!");
-            } else {
-                System.out.println("Player busts!");
-            }
-        }
-    
-    }
+	public void hit(Card card) {
+		System.out.println("[DEBUG] hit method called with: " + card);
+		hand.addCard(card); // Directly add card to hand
 
-    public void stand() {
-    	if (this instanceof Dealer) {
-            System.out.println("Dealer stands.");
-        } else {
-            System.out.println("Player stands.");
-        }
-    }
+		// **************************Debug****************
+		System.out.println("[DEBUG] Player hits: " + card);
 
-    public boolean isBust() {
-        return ((BlackjackHand) hand).isBust();
-    }
+		if (this instanceof Dealer) {
+			System.out.println("Dealer's Card: " + card);
+		} else {
+			System.out.println("Player's Card: " + card);
+		}
+	}
 
-    
-    public void displayHand() {
-    	System.out.print((this instanceof Dealer) ? "Player's Hand: " : "Dealer's Hand: ");
-        List<Card> cards = hand.getCards();
+	public void stand() {
+		System.out.println((this instanceof Dealer) ? "Dealer stands." : "Player stands.");
+	}
 
-        for (int i = 0; i < cards.size(); i++) {
-            System.out.print(cards.get(i)); 
-            if (i < cards.size() - 1) {
-                System.out.print(", ");
-            }
-        }
+	public boolean isBust() {
+		return hand.getHandValue() > 21;
+	}
 
-        System.out.println();
-    }
+	private void checkBust() {
+		if (((BlackjackHand) hand).isBust()) {
+			System.out.println((this instanceof Dealer) ? "Dealer" : "Player" + " busts!");
+		}
+	}
 
-   
+//	public void displayHand() {
+//		List<Card> cards = hand.getCards();
+//		System.out.print((this instanceof Dealer) ? "Dealer's Hand: " : "Player's Hand: ");
+//
+//		for (int i = 0; i < cards.size(); i++) {
+//			if (this instanceof Dealer && i == 1) {
+//				System.out.print("Face Down");
+//			} else {
+//				System.out.print(cards.get(i));
+//			}
+//
+//			if (i < cards.size() - 1) {
+//				System.out.print(", ");
+//			}
+//		}
+//
+//		if (!(this instanceof Dealer)) {
+//			System.out.println(" (" + hand.getHandValue() + ")"); // Display the hand's total value for the player
+//		} else {
+//			System.out.println();
+//		}
+//	}
 
-    public void play(Dealer dealer) {
-        Scanner userInput = new Scanner(System.in);
+	// ***************DEBUG METHOD*************************
+	public void displayHand() {
+		List<Card> cards = hand.getCards();
+		System.out.print((this instanceof Dealer) ? "Dealer's Hand: " : "Player's Hand: ");
 
-        while (!isBust()) {
-            System.out.println("Does the player want to Hit or Stand (H or S)?");
-            String choice = userInput.nextLine();
+		for (Card card : cards) {
+			System.out.print(card + ", ");
+		}
 
-            if (choice.equalsIgnoreCase("H")) {
-                hit(dealer.dealCard());
-                displayHand();
-            } else if (choice.equalsIgnoreCase("S")) {
-                stand();
-                break;
-            } else {
-                System.out.println("Invalid choice. Please enter 'H' or 'S'.");
-            }
-        }
-    }
+		// debug: Print the entire hand and its total value
+		System.out.println();
+		System.out.println("[DEBUG] Current hand: " + cards + " | Hand value: " + hand.getHandValue());
+	}
+
+	public void playersTurn(Dealer dealer, Scanner scanner) {
+
+		while (!isBust()) {
+			System.out.println("Does the player want to Hit or Stand (H or S)?");
+			String choice = scanner.nextLine();
+
+			if (choice.equalsIgnoreCase("H")) {
+				Card card = dealer.dealCard(hand);
+				hit(card);
+				displayHand(); // Display hand after hitting
+				if (isBust()) {
+					System.out.println("Player busts!"); // Display bust message after updating hand
+					break;
+				}
+			} else if (choice.equalsIgnoreCase("S")) {
+				stand();
+				break;
+			} else {
+				System.out.println("Invalid choice. Please enter 'H' or 'S'.");
+			}
+		}
+	}
 }
