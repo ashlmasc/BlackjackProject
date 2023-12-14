@@ -4,8 +4,6 @@ import java.util.List;
 
 public class BlackjackHand extends Hand {
 
-	// public int getHandValue;
-
 	public boolean isBlackjack() {
 		return getHandValue() == 21;
 	}

@@ -23,18 +23,19 @@ public class BlackjackApplication {
 
 		// Display initial cards
 		System.out.println("Player's Hand: " + player.getHand() + " (" + player.getHand().getHandValue() + ")");
-		System.out.println("Dealer's Hand: " + dealer.getHand().getCards().get(0) + ", Face Down");
+		dealer.displayHand(); // This will show first card face down initially
 
 		// Start player's turn
-		player.playersTurn(dealer, scanner);
+	    player.playersTurn(dealer, scanner);
 
-		// After Player stands, reveal Dealer's full hand
-		System.out.println("Dealer's Hand: " + dealer.getHand() + " (" + dealer.getHand().getHandValue() + ")");
+	    // Reveal dealer's full hand
+	    dealer.setFirstCardFaceDown(false); // Ensure first card is no longer face down
+	    System.out.println("Dealer's Hand: " + dealer.getHand());
+	    
+	    // Dealer's turn
+	    dealer.dealersTurn();
 
-		// Dealer's turn
-		dealer.dealersTurn();
-
-		// Determine and display winner
+		// determine and display winner
 		determineAndDisplayWinner();
 
 	}

@@ -12,9 +12,6 @@ public abstract class Hand {
 
 	public void addCard(Card card) {
 		cards.add(card);
-		// ****************Debug***************
-		System.out.println("[DEBUG] Adding card to hand: " + card);
-
 	}
 
 	public List<Card> getCards() {
