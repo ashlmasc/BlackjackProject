@@ -33,6 +33,7 @@ public class Dealer extends Player {
 				if (i < cards.size() - 1) {
 					System.out.print(", ");
 				}
+				System.out.println(" (" + cards.get(1).getValue() + ")");
 			}
 			System.out.println();
 			isFirstCardFaceDown = false; // Update the flag after the first display

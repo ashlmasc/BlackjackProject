@@ -15,8 +15,6 @@ public class Player {
 	}
 
 	public void hit(Card card) {
-		//hand.addCard(card); // Directly add card to hand
-
 		if (this instanceof Dealer) {
 			hand.addCard(card);
 			System.out.println("Dealer's Card: " + card);
@@ -33,40 +31,30 @@ public class Player {
 		return hand.getHandValue() > 21;
 	}
 
-
 	public void displayHand() {
 		List<Card> cards = hand.getCards();
-		System.out.print((this instanceof Dealer) ? "Dealer's Hand: " : "Player's Hand: ");
+		System.out.print("Player's Hand: ");
 
 		for (int i = 0; i < cards.size(); i++) {
-			if (this instanceof Dealer && i == 1) {
-				System.out.print("Face Down");
-			} else {
-				System.out.print(cards.get(i));
-			}
-
+			System.out.print(cards.get(i));
 			if (i < cards.size() - 1) {
 				System.out.print(", ");
 			}
 		}
 
-		if (!(this instanceof Dealer)) {
-			System.out.println(" (" + hand.getHandValue() + ")"); // Display the hand's total value for the player
-		} else {
-			System.out.println();
-		}
+		System.out.println(" (" + hand.getHandValue() + ")"); // Display the hand's total value
 	}
 
 	public void playersTurn(Dealer dealer, Scanner scanner) {
 
 		while (!isBust()) {
-			System.out.println("Does the player want to Hit or Stand (H or S)?");
+			System.out.println("Does the player want to Hit or Stand (H or S)? ");
 			String choice = scanner.nextLine();
 
 			if (choice.equalsIgnoreCase("H")) {
 				Card card = dealer.dealCard(this.getHand()); // Pass the player's hand as an argument
-			    hit(card); // hit method will add the card to player's hand
-			    displayHand(); // Display hand after hitting
+				hit(card); // hit method will add the card to player's hand
+				displayHand(); // Display hand after hitting
 				if (isBust()) {
 					System.out.println("Player busts!"); // Display bust message after updating hand
 					break;

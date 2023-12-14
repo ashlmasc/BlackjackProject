@@ -16,28 +16,42 @@ public class BlackjackApplication {
 	}
 
 	public void run() {
+		boolean keepPlaying = true;
 		System.out.println("Welcome to Blackjack!\n");
 
-		// Deal initial hands
-		dealer.dealInitialHands(player, dealer);
+		while (keepPlaying) {
+			// Reset hands for a new game
+	        player.getHand().clear();
+	        dealer.getHand().clear();
+	        
+	     // Reset the dealer's isFirstCardFaceDown flag
+	        dealer.setFirstCardFaceDown(true);
+			
+			// Deal initial hands
+			dealer.dealInitialHands(player, dealer);
 
-		// Display initial cards
-		System.out.println("Player's Hand: " + player.getHand() + " (" + player.getHand().getHandValue() + ")");
-		dealer.displayHand(); // This will show first card face down initially
+			// Display initial cards
+			System.out.println("Player's Hand: " + player.getHand() + " (" + player.getHand().getHandValue() + ")");
+			dealer.displayHand(); // This will show first card face down initially
 
-		// Start player's turn
-	    player.playersTurn(dealer, scanner);
+			// Start player's turn
+			player.playersTurn(dealer, scanner);
+			System.out.println();
 
-	    // Reveal dealer's full hand
-	    dealer.setFirstCardFaceDown(false); // Ensure first card is no longer face down
-	    System.out.println("Dealer's Hand: " + dealer.getHand());
-	    
-	    // Dealer's turn
-	    dealer.dealersTurn();
+			// Reveal dealer's full hand
+			dealer.setFirstCardFaceDown(false); // Ensure first card is no longer face down
+			System.out.println("Dealer's Hand: " + dealer.getHand() + " (" + dealer.getHand().getHandValue() + ")");
 
-		// determine and display winner
-		determineAndDisplayWinner();
+			// Dealer's turn
+			dealer.dealersTurn();
 
+			// determine and display winner
+			determineAndDisplayWinner();
+
+			// Ask the player if they want to play again
+			keepPlaying = askToPlayAgain();
+		}
+		System.out.println("Thanks for playing Blackjack!");
 	}
 
 	private void determineAndDisplayWinner() {
@@ -45,9 +59,9 @@ public class BlackjackApplication {
 		int dealerValue = dealer.getHand().getHandValue();
 
 		if (playerValue > 21) {
-			System.out.println("Player busts! Dealer wins!");
+			System.out.println("Dealer wins!");
 		} else if (dealerValue > 21) {
-			System.out.println("Dealer busts! Player wins!");
+			System.out.println("Player wins!");
 		} else if (playerValue > dealerValue) {
 			System.out.println("Player wins!");
 		} else if (dealerValue > playerValue) {
@@ -55,5 +69,11 @@ public class BlackjackApplication {
 		} else {
 			System.out.println("It's a tie!");
 		}
+	}
+
+	private boolean askToPlayAgain() {
+		System.out.println("\nDo you want to play again? 'y' or 'n': ");
+		String response = scanner.nextLine();
+		return response.equalsIgnoreCase("y");
 	}
 }
