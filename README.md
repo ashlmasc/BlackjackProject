@@ -1,1 +1,9 @@
 # BlackjackProject
+## Overview
+This Project is a simple Blackjack Game; the objective being to get a total of 21 with a hand of cards. If no one gets a total of 21, the player with the highest hand without going over 21 wins the game. If the player goes over 21, the player "Busts!" and automatically loses to the dealer. There is one Player and a Dealer(the computer). 
+
+## How to run
+Compile and run BlackjackApplication.Java. The program will deal two cards; two to the player and two to dealer with the dealer's first card displaying "Face Down" to simulate a real game of Blackjack where the dealer's first card is dealt face down. The player will be prompted to hit or stand ('h' or 's'). When the player chooses to stand, the dealer's full hand is revealed and the dealer's turn begins. The dealer then can choose to hit or stand. When the dealer chooses to stand, the game is over and the winner is displayed. There are 3 possibilities at the end of the round: Player wins, Dealer wins, or the Round is a tie. The player is then prompted to play another round if they want to and the player and dealer are dealt new cards.
+
+## Lessons Learned
+I struggled so much with this project. I initially got the program working, but for some reason I struggled with how to modify the program so the dealer's first card is shown as "Face Down". After I finally got it working correctly again with the "Face Down" card and everything, I definitely had a sort of "light bulb" moment of better understanding of the entire program. Completing this project forced me to better comprehend inheritance and polymorphism when writing out methods for the 'Dealer' and 'Player' and figuring out where to write what methods in their respective classes that made the most sense. I also still struggle a little bit with the syntax of calling objects from different classes and this project was great practice for that.

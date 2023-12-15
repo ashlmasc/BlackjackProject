@@ -21,12 +21,12 @@ public class BlackjackApplication {
 
 		while (keepPlaying) {
 			// Reset hands for a new game
-	        player.getHand().clear();
-	        dealer.getHand().clear();
-	        
-	     // Reset the dealer's isFirstCardFaceDown flag
-	        dealer.setFirstCardFaceDown(true);
-			
+			player.getHand().clear();
+			dealer.getHand().clear();
+
+			// Reset the dealer's isFirstCardFaceDown flag
+			dealer.setFirstCardFaceDown(true);
+
 			// Deal initial hands
 			dealer.dealInitialHands(player, dealer);
 
